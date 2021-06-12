@@ -15,7 +15,7 @@ public class SecondServiceController {
         return "Welcome to the Second Service";
     }
 
-    @GetMapping("/mesage")
+    @GetMapping("/message")
     public String message(@RequestHeader("second-request") String serviceName) {
         log.info(serviceName);
         return "Welcome to the Second Service Message<br/>" + serviceName;
