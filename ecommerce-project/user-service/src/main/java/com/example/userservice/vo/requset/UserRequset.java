@@ -1,4 +1,4 @@
-package com.example.userservice.domain.dto;
+package com.example.userservice.vo.requset;
 
 import lombok.Data;
 

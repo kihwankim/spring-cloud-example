@@ -1,12 +1,15 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.domain.dto.UserDto;
-import com.example.userservice.domain.dto.UserRequset;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.Greeting;
+import com.example.userservice.vo.requset.UserRequset;
+import com.example.userservice.vo.response.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,13 +31,14 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public String createUser(@RequestBody UserRequset userRequset) {
+    public ResponseEntity<?> createUser(@RequestBody UserRequset userRequset) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         UserDto userDto = mapper.map(userRequset, UserDto.class);
         userService.createUser(userDto);
+        ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
 
-        return "Create User method is called";
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
 }
