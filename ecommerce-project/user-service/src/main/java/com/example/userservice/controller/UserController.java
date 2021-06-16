@@ -1,10 +1,13 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.domain.dto.UserDto;
+import com.example.userservice.domain.dto.UserRequset;
+import com.example.userservice.service.UserService;
 import com.example.userservice.vo.Greeting;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final Greeting greeting;
+    private final UserService userService;
 
     @GetMapping("/health-check")
     public String status() {
@@ -21,5 +25,16 @@ public class UserController {
     @GetMapping("/welcome")
     public String welcome() {
         return greeting.getMessage();
+    }
+
+    @PostMapping("/users")
+    public String createUser(@RequestBody UserRequset userRequset) {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        UserDto userDto = mapper.map(userRequset, UserDto.class);
+        userService.createUser(userDto);
+
+        return "Create User method is called";
     }
 }
