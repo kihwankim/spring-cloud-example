@@ -38,9 +38,19 @@ public class UserController {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         UserDto userDto = mapper.map(userRequset, UserDto.class);
-        userService.createUser(userDto);
-        ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
+        UserDto savedResult = userService.createUser(userDto);
+        ResponseUser responseUser = mapper.map(savedResult, ResponseUser.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> createUser() {
+        return ResponseEntity.ok(userService.getUserByAll());
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<?> createUser(@PathVariable("userId") String userId) {
+        return ResponseEntity.ok(userService.getUserByUserid(userId));
     }
 }

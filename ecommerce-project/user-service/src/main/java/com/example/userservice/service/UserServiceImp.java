@@ -3,13 +3,18 @@ package com.example.userservice.service;
 import com.example.userservice.domain.User;
 import com.example.userservice.domain.dto.UserDto;
 import com.example.userservice.repository.UserRepository;
+import com.example.userservice.vo.response.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,8 +35,25 @@ public class UserServiceImp implements UserService {
         User user = mapper.map(userDto, User.class);
         user.setEncryptedPwd(passwordEncoder.encode(userDto.getPassword()));
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        return null;
+        return new ModelMapper().map(savedUser, UserDto.class);
+    }
+
+    @Override
+    public UserDto getUserByUserid(String userId) {
+        Optional<User> findUser = userRepository.findByUserId(userId);
+        User user = findUser
+                .orElseThrow(() -> new UsernameNotFoundException("User not found Exception"));
+
+        return new ModelMapper().map(user, UserDto.class);
+    }
+
+    @Override
+    public List<ResponseUser> getUserByAll() {
+        List<ResponseUser> responseUsers = new ArrayList<>();
+        userRepository.findAll().forEach(v ->
+                responseUsers.add(new ModelMapper().map(v, ResponseUser.class)));
+        return responseUsers;
     }
 }
