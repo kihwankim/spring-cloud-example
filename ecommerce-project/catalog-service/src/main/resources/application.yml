@@ -29,5 +29,5 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-logging:
-  level: debug
+#logging:
+#  level: debug
