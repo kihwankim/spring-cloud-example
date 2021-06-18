@@ -7,6 +7,7 @@ import com.example.userservice.vo.response.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,12 @@ public class UserServiceImp implements UserService {
         userRepository.findAll().forEach(v ->
                 responseUsers.add(new ModelMapper().map(v, ResponseUser.class)));
         return responseUsers;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User findUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("Not found User email : %s", email)));
+        return null;
     }
 }
