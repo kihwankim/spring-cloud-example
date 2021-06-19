@@ -62,6 +62,9 @@ public class UserServiceImp implements UserService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User findUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("Not found User email : %s", email)));
-        return null;
+
+        return new org.springframework.security.core.userdetails.User(findUser.getEmail(), findUser.getEncryptedPwd(),
+                true, true, true, true, new ArrayList<>());
+        // 마지막에 권한
     }
 }
