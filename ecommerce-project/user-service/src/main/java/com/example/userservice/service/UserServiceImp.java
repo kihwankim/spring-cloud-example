@@ -59,6 +59,14 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public UserDto getUserDetailsByEmail(String email) {
+        User findUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User not found Exception email -> %s", email)));
+
+        return new ModelMapper().map(findUser, UserDto.class);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User findUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("Not found User email : %s", email)));
