@@ -1,0 +1,3 @@
+token:
+  expiration-time: 86400000 # 하루
+  secret: spring_sercret_key
