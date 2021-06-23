@@ -31,6 +31,14 @@ logging:
   level:
     com.example.userservice: DEBUG
 
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
+# config 값을 refresh 를 자동화 해주는 것
+
 #token:
 #  expiration-time: 86400000 # 하루
 #  secret: spring_sercret_key
