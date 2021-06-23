@@ -31,6 +31,6 @@ logging:
   level:
     com.example.userservice: DEBUG
 
-token:
-  expiration-time: 86400000 # 하루
-  secret: spring_sercret_key
+#token:
+#  expiration-time: 86400000 # 하루
+#  secret: spring_sercret_key
