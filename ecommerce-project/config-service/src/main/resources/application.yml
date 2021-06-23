@@ -9,4 +9,4 @@ spring:
     config:
       server:
         git:
-          uri: file:\\\${user.dir}\config
+          uri: file:///D:\Programs\Intellij\Programs\webprojects\class-project\sping-cloud-config
