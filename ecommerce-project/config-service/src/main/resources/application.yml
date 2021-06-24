@@ -9,4 +9,8 @@ spring:
     config:
       server:
         git:
+#          uri: https://github.com/kihwankim/spring-cloud-example-config.git
+#          private repo 일 경우 username passowrd 추가하기
+#          username: abcd
+#          password: abcd
           uri: file:///D:\Programs\Intellij\Programs\webprojects\class-project\sping-cloud-config
