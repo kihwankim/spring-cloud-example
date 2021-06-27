@@ -1,2 +1,6 @@
 encrypt:
-  key: abcdefghijklmnopqrstuvexyz1234567890
+#  key: abcdefghijklmnopqrstuvexyz1234567890
+  key-store:
+    location: file:///D:\Programs\Intellij\Programs\webprojects\class-project\keystore\apiEncryptionKey.jks
+    password: test1234
+    alias: apiEncryptionKey
