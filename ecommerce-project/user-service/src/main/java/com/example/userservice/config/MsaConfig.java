@@ -20,9 +20,4 @@ public class MsaConfig {
     public Logger.Level feignLoggerLevel() { // feign client logger
         return Logger.Level.FULL;
     }
-
-    @Bean
-    public ErrorDecoder feignErrorDecoder() {
-        return new FeignErrorDecoder();
-    }
 }
