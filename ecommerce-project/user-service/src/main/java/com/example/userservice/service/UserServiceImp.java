@@ -6,7 +6,9 @@ import com.example.userservice.domain.dto.UserDto;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.vo.response.ResponseOrder;
 import com.example.userservice.vo.response.ResponseUser;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.env.Environment;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -67,7 +70,13 @@ public class UserServiceImp implements UserService {
 //        List<ResponseOrder> orders = ordersResponse.getBody();
 
         /* Feign client */
-        List<ResponseOrder> orders = orderServiceClient.getOrdersByUserId(userId);
+        /* Feign exception handling */
+        List<ResponseOrder> orders = null;
+        try {
+            orders = orderServiceClient.getOrdersByUserId(userId);
+        } catch (FeignException ex) {
+            log.error(ex.getMessage());
+        }
 
         userDto.setOrders(orders);
 
