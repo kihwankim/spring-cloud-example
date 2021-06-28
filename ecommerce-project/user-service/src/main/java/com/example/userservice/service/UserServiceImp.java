@@ -6,7 +6,6 @@ import com.example.userservice.domain.dto.UserDto;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.vo.response.ResponseOrder;
 import com.example.userservice.vo.response.ResponseUser;
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -71,12 +70,14 @@ public class UserServiceImp implements UserService {
 
         /* Feign client */
         /* Feign exception handling */
-        List<ResponseOrder> orders = null;
-        try {
-            orders = orderServiceClient.getOrdersByUserId(userId);
-        } catch (FeignException ex) {
-            log.error(ex.getMessage());
-        }
+//        List<ResponseOrder> orders = null;
+//        try {
+//            orders = orderServiceClient.getOrdersByUserId(userId);
+//        } catch (FeignException ex) {
+//            log.error(ex.getMessage());
+//        }
+        /* ErrorDecoder */
+        List<ResponseOrder> orders = orderServiceClient.getOrdersByUserId(userId);
 
         userDto.setOrders(orders);
 
