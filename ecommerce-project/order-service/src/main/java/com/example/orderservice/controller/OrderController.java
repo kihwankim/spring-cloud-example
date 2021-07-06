@@ -3,6 +3,7 @@ package com.example.orderservice.controller;
 import com.example.orderservice.domain.dto.OrderDto;
 import com.example.orderservice.domain.vo.RequsetOrder;
 import com.example.orderservice.domain.vo.ResponseOrder;
+import com.example.orderservice.messagequeue.consumer.KafkaProducer;
 import com.example.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final Environment env;
     private final OrderService orderService;
+    private final KafkaProducer kafkaProducer;
 
     @GetMapping("/health-check")
     public String status() {
@@ -33,6 +35,11 @@ public class OrderController {
         OrderDto orderDto = mapper.map(requsetOrder, OrderDto.class);
         orderDto.setUserId(userId);
         OrderDto savedOrder = orderService.createOrder(orderDto);
+
+        /**
+         * send this order to the kafka
+         */
+        kafkaProducer.send("example-catalog-topic", orderDto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
