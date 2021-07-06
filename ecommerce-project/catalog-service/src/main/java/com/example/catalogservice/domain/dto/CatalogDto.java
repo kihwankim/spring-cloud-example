@@ -1,4 +1,4 @@
-package com.example.catalogservice.domain.tdo;
+package com.example.catalogservice.domain.dto;
 
 import lombok.Data;
 
