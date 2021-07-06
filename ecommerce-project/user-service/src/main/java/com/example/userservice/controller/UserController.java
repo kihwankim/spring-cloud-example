@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
@@ -23,11 +25,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/health-check")
-    public String status() {
+    public String status(HttpServletRequest req) {
+        String url = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
         return "It's Working in User Service"
                 + ", Port(local.server.port)=" + env.getProperty("local.server.port")
                 + ", Port(server.port)=" + env.getProperty("server.port")
-                + ", Port(token.expiration-time)=" + env.getProperty("token.expiration-time");
+                + ", Port(token.expiration-time)=" + env.getProperty("token.expiration-time")
+                + ", Requset uri = " + url;
     }
 
     @GetMapping("/welcome")
