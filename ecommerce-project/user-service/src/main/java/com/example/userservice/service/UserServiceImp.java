@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,6 +39,7 @@ public class UserServiceImp implements UserService {
 
     // FeignClient 로 통신
     private final OrderServiceClient orderServiceClient;
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
     @Override
     @Transactional
@@ -77,7 +80,11 @@ public class UserServiceImp implements UserService {
 //            log.error(ex.getMessage());
 //        }
         /* ErrorDecoder */
-        List<ResponseOrder> orders = orderServiceClient.getOrdersByUserId(userId);
+//        List<ResponseOrder> orders = orderServiceClient.getOrdersByUserId(userId);
+
+        CircuitBreaker circuitbreaker = circuitBreakerFactory.create("circuitbreaker");
+        List<ResponseOrder> orders = circuitbreaker.run(() -> orderServiceClient.getOrdersByUserId(userId)
+                , throwable -> new ArrayList<>());
 
         userDto.setOrders(orders);
 
