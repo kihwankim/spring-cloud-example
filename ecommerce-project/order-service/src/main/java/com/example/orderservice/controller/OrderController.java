@@ -7,6 +7,7 @@ import com.example.orderservice.messagequeue.consumer.KafkaProducer;
 import com.example.orderservice.messagequeue.producer.OrderProducer;
 import com.example.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.env.Environment;
@@ -14,8 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/order-service")
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ public class OrderController {
     @PostMapping("/{userId}/orders")
     public ResponseEntity<?> saveOrder(@PathVariable("userId") String userId,
                                        @RequestBody RequsetOrder requsetOrder) {
+        log.info("Before add orders data");
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -54,6 +58,8 @@ public class OrderController {
         kafkaProducer.send("example-catalog-topic", orderDto);
         orderProducer.send("orders", orderDto);
 
+        log.info("After add orders data");
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapper.map(orderDto, ResponseOrder.class));
@@ -61,6 +67,10 @@ public class OrderController {
 
     @GetMapping("/{userId}/orders")
     public ResponseEntity<?> getAllOrdersByUserId(@PathVariable("userId") String userId) {
-        return ResponseEntity.ok(orderService.getAllOrdersByUserId(userId));
+        log.info("Before retrieve order data");
+        List<ResponseOrder> allOrdersByUserId = orderService.getAllOrdersByUserId(userId);
+        log.info("After retrieve order data");
+
+        return ResponseEntity.ok(allOrdersByUserId);
     }
 }
