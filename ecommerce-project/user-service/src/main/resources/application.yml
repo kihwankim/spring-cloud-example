@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9070
 
 spring:
   application:
@@ -47,7 +47,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, busrefresh
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus
 # config 값을 refresh 를 자동화 해주는 것
 
 #token:
