@@ -4,8 +4,8 @@ server:
 spring:
   application:
     name: config-server
-  profiles:
-    active: native
+#  profiles:
+#    active: native
 
   rabbitmq:
     host: 127.0.0.1
@@ -16,14 +16,13 @@ spring:
   cloud:
     config:
       server:
-        native:
-          search-locations: file:///D:\Programs\Intellij\Programs\webprojects\class-project\sping-cloud-config
+#        native:
+#          search-locations: file:///D:\Programs\Intellij\Programs\webprojects\class-project\sping-cloud-config
         git:
-#          uri: https://github.com/kihwankim/spring-cloud-example-config.git
+          uri: https://github.com/kihwankim/spring-cloud-example-config.git
 #          private repo 일 경우 username passowrd 추가하기
 #          username: abcd
 #          password: abcd
-          uri: file:///D:\Programs\Intellij\Programs\webprojects\class-project\sping-cloud-config
 
 management:
   endpoints:
